@@ -1,0 +1,8 @@
+name: c${project.name}
+version: ${project.version}
+description: ${project.description}
+author: Crunkle
+website: http://www.crunkle.net
+
+main: ${project.groupId}.${project.artifactId}.${project.name}Plugin
+depend: [ProtocolLib, PacketWrapper]
