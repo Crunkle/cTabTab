@@ -128,12 +128,12 @@ public final class TabTabAPI {
      * @param target the player to be targeted
      */
     public void initializeList(Player target) {
-        for (int slot = 11; slot <= 74; slot++) {
+        for (int slot = 11; slot <= 90; slot++) {
             ((CraftPlayer) target).getHandle().playerConnection.sendPacket(
-                    createPlayerInfo(String.valueOf(slot))
+                    this.createPlayerInfo(String.valueOf(slot))
             );
 
-            createScoreboardTeam(String.valueOf(slot)).sendPacket(target);
+            this.createScoreboardTeam(String.valueOf(slot)).sendPacket(target);
         }
     }
 
@@ -148,13 +148,13 @@ public final class TabTabAPI {
      * @param text   the text to be displayed
      */
     public void setSlot(Player player, int x, int y, String text) {
-        if (x < 1 || x > 16) {
+        if (x < 1 || x > 4) {
             return;
-        } else if (y < 1 || y > 4) {
+        } else if (y < 1 || y > 20) {
             return;
         }
 
-        createScoreboardUpdate(getSlotName(x, y), text).sendPacket(player);
+        this.createScoreboardUpdate(getSlotName(x, y), text).sendPacket(player);
     }
 
     /**
@@ -166,7 +166,7 @@ public final class TabTabAPI {
      * @return the numerical name of the slot
      */
     public String getSlotName(int x, int y) {
-        return String.valueOf(11 + (x - 1) % 16 + (y - 1) * 16);
+        return String.valueOf(11 + (y - 1) % 20 + (x - 1) * 20);
     }
 
     /**
