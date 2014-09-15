@@ -1,9 +1,6 @@
 package net.crunkle.tabtab.api;
 
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import net.crunkle.tabtab.api.adapters.TabPacketAdapter;
 import net.minecraft.server.v1_7_R4.ChatComponentText;
 import net.minecraft.server.v1_7_R4.EnumGamemode;
 import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
@@ -13,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 import org.spigotmc.ProtocolInjector;
 
 import java.lang.reflect.Field;
@@ -32,7 +30,7 @@ public final class TabTabAPI {
     private static final String SUFFIX;
 
     private final JavaPlugin plugin;
-    private final ProtocolManager protocolManager;
+    private Team resetTeam;
     private String header;
     private String footer;
 
@@ -42,15 +40,54 @@ public final class TabTabAPI {
     }
 
     {
-        this.protocolManager = ProtocolLibrary.getProtocolManager();
         this.header = "";
         this.footer = "";
     }
 
     public TabTabAPI(JavaPlugin plugin) {
         this.plugin = plugin;
+    }
 
-        this.protocolManager.addPacketListener(new TabPacketAdapter(this.plugin));
+    /**
+     * Adds a new player to the tab team in order to bypass
+     * the online checks and also bypass tab order checks.
+     *
+     * @param player the player to be added
+     */
+    public void addTeamPlayer(Player player) {
+        this.resetTeam.addPlayer(player);
+    }
+
+    /**
+     * Removes a player from the tab team once the player
+     * is no longer using the tab list.
+     *
+     * @param player the player to be removed
+     */
+    public void removeTeamPlayer(Player player) {
+        this.resetTeam.removePlayer(player);
+    }
+
+    /**
+     * Resets the default tab team in order to bypass the
+     * online checks and also bypass tab order checks.
+     */
+    public void resetTeam() {
+        this.resetTeam = Bukkit.getScoreboardManager()
+                .getMainScoreboard().getTeam("tabReset");
+
+        if (this.resetTeam != null) {
+            this.resetTeam.unregister();
+        }
+
+        this.resetTeam = Bukkit.getScoreboardManager()
+                .getMainScoreboard().registerNewTeam("tabReset");
+
+        this.resetTeam.setPrefix(ChatColor.RESET.toString());
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            this.addTeamPlayer(player);
+        }
     }
 
     /**

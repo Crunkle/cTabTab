@@ -27,6 +27,8 @@ public class TabTabPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new TabTabListener(), this);
+
+        this.tabTabAPI.resetTeam();
     }
 
     @Override
