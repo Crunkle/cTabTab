@@ -205,6 +205,12 @@ public final class TabTabAPI {
             return;
         }
 
+        // Ensure that the length does not exceed the buffer
+
+        if (text.length() > 16) {
+            text = text.substring(0, 16);
+        }
+
         this.createScoreboardUpdate(getSlotName(x, y), text).sendPacket(player);
     }
 
