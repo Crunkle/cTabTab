@@ -149,6 +149,13 @@ public final class TabTabAPI {
             return;
         }
 
+        // Only send the packets to supported clients
+
+        if (((CraftPlayer) target).getHandle().playerConnection
+                .networkManager.getVersion() < 47) {
+            return;
+        }
+
         ((CraftPlayer) target).getHandle().playerConnection.sendPacket(
                 new ProtocolInjector.PacketTabHeader(
                         new ChatComponentText(this.header.length() > 0 ? this.header + "\n" : ""),
@@ -165,6 +172,13 @@ public final class TabTabAPI {
      * @param target the player to be targeted
      */
     public void initializeList(Player target) {
+        // Only send the packets to supported clients
+
+        if (((CraftPlayer) target).getHandle().playerConnection
+                .networkManager.getVersion() < 47) {
+            return;
+        }
+
         for (int slot = 11; slot <= 90; slot++) {
             ((CraftPlayer) target).getHandle().playerConnection.sendPacket(
                     this.createPlayerInfo(String.valueOf(slot))
