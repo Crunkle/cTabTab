@@ -199,6 +199,13 @@ public final class TabTabAPI {
      * @param text   the text to be displayed
      */
     public void setSlot(Player player, int x, int y, String text) {
+        // Only send the packets to supported clients
+
+        if (((CraftPlayer) player).getHandle().playerConnection
+                .networkManager.getVersion() < 47) {
+            return;
+        }
+
         if (x < 1 || x > 4) {
             return;
         } else if (y < 1 || y > 20) {
