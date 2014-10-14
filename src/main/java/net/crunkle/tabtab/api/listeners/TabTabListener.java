@@ -3,6 +3,7 @@ package net.crunkle.tabtab.api.listeners;
 import net.crunkle.tabtab.api.TabTabAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -22,7 +23,7 @@ public final class TabTabListener implements Listener {
         this.tabTabAPI = Bukkit.getServicesManager().load(TabTabAPI.class);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         this.tabTabAPI.addTeamPlayer(event.getPlayer());
 
